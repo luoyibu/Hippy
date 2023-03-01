@@ -10,7 +10,7 @@ source "https://pod-go.woa.com/QQFrameworks/pod_specs/"
 target "HippyDemo" do
     use_frameworks!
     pod 'hippy', :path => '../../..'
-    pod 'HippyRender'
+    pod 'HippyRender', :path => '../../../../iOSRender'
     pod 'shared', :path => '../../../../HippyKotlinDemo/shared'
     pod 'NTWebImageKit', '~> 0.1.1'
 end
