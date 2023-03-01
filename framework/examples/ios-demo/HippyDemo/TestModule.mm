@@ -44,6 +44,7 @@ static NSString *const engineKey = @"Demo";
     std::shared_ptr<NativeRenderManager> _nativeRenderManager;
     std::shared_ptr<hippy::RootNode> _rootNode;
     __weak UIViewController *_weakVC;
+    UIButton *_backBtn;
 }
 
 @end
@@ -59,9 +60,15 @@ HIPPY_EXPORT_MODULE()
 HIPPY_EXPORT_METHOD(debug:(nonnull NSNumber *)instanceId) {
 }
 
+- (void)dissmissVC
+{
+    AppDelegate *delegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+    [delegate.window.rootViewController dismissViewControllerAnimated:YES completion:nil];
+}
+
 HIPPY_EXPORT_METHOD(remoteDebug:(nonnull NSNumber *)instanceId bundleUrl:(nonnull NSString *)bundleUrl) {
     AppDelegate *delegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-    UIViewController *rootViewController = delegate.window.rootViewController;
+    UIViewController *rootViewController = [delegate topViewController];
     UIViewController *vc = [[UIViewController alloc] init];
     BOOL isSimulator = NO;
 #if TARGET_IPHONE_SIMULATOR
@@ -90,6 +97,13 @@ HIPPY_EXPORT_METHOD(remoteDebug:(nonnull NSNumber *)instanceId bundleUrl:(nonnul
     [vc.view addSubview:rootView];
     vc.modalPresentationStyle = UIModalPresentationFullScreen;
     [rootViewController presentViewController:vc animated:YES completion:NULL];
+        
+    _backBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    _backBtn.frame = CGRectMake(350, 44, 50, 40);
+    _backBtn.backgroundColor = [UIColor yellowColor];
+    [_backBtn addTarget:self action:@selector(dissmissVC) forControlEvents:UIControlEventTouchUpInside];
+    [vc.view addSubview:_backBtn];
+    
     _weakVC = vc;
 }
 
@@ -145,7 +159,7 @@ HIPPY_EXPORT_METHOD(remoteDebug:(nonnull NSNumber *)instanceId bundleUrl:(nonnul
         return;
     }
     AppDelegate *delegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-    UIViewController *rootViewController = delegate.window.rootViewController;
+    UIViewController *rootViewController = [delegate topViewController];
     NativeRenderRootView *rootView = [[NativeRenderRootView alloc] initWithFrame:rootViewController.view.bounds];
     NSArray<NSURL *> *bundleURLs = nil;
     NSString *bundleStr = [HippyBundleURLProvider sharedInstance].bundleURLString;
@@ -159,6 +173,8 @@ HIPPY_EXPORT_METHOD(remoteDebug:(nonnull NSNumber *)instanceId bundleUrl:(nonnul
     [self setupBridge:bridge rootView:rootView bundleURLs:bundleURLs props:@{@"isSimulator": @(isSimulator)}];
     rootView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
     [vc.view addSubview:rootView];
+    
+    [vc.view bringSubviewToFront:_backBtn];
 }
 
 - (BOOL)shouldStartInspector:(HippyBridge *)bridge {

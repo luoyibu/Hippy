@@ -22,6 +22,7 @@
 
 #import "AppDelegate.h"
 #import "ViewController.h"
+#import "MainViewController.h"
 
 @interface AppDelegate ()
 
@@ -29,6 +30,14 @@
 
 @implementation AppDelegate
 
+- (UIViewController *)topViewController
+{
+    UIViewController *rootVc = [self.window rootViewController];
+    while (rootVc.presentedViewController && ![rootVc.presentedViewController isKindOfClass:[UIAlertController class]]) {
+        rootVc = rootVc.presentedViewController;
+    }
+    return rootVc;
+}
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
 
@@ -46,8 +55,9 @@
 
     // Override point for customization after application launch.
     self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
-    ViewController *vc = [ViewController new];
-    [self.window setRootViewController: vc];
+    MainViewController *mainVc = [MainViewController new];
+//    UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:mainVc];
+    [self.window setRootViewController: mainVc];
     [self.window makeKeyAndVisible];
     return YES;
 }
