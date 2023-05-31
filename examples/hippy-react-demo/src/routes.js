@@ -10,6 +10,14 @@ const PAGE_LIST = {
 
 export default [
   {
+    path: '/Demo',
+    name: '协商历史',
+    component: PAGE_LIST.Demo,
+    meta: {
+      style: 1,
+    },
+  },
+  {
     path: '/View',
     name: 'View 组件',
     component: PAGE_LIST.View,

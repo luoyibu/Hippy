@@ -18,26 +18,30 @@ const SKIN_COLOR = {
 
 const styles = StyleSheet.create({
   container: {
-    height: 56,
-    backgroundColor: SKIN_COLOR.mainLight,
+    height: 34,
+    backgroundColor: 'white',
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
+    justifyContent: "center",
   },
   backIcon: {
-    width: 24,
-    height: 24,
+    width: 10,
+    height: 17,
+    top: 12,
+    left: 12,
+    right: 12,
+    bottom: 12,
+    position: 'absolute',
   },
   headerButton: {
-    height: 64,
-    paddingHorizontal: 24,
     alignItems: 'center',
     justifyContent: 'center',
   },
   title: {
-    fontSize: 20,
-    color: SKIN_COLOR.textWhite,
+    fontSize: 17,
+    color: 'black',
     lineHeight: 24,
+    fontWeight: 'bold',
   },
 });
 
@@ -61,20 +65,14 @@ const Header = ({ history, route }) => {
   }
   return (
     <View style={[styles.container]}>
-      <View
+      <Image
+        style={styles.backIcon}
         onClick={() => history.goBack()}
-        style={[styles.headerButton, Platform.OS === 'ios' ? null : { marginLeft: 20 }]}
-      >
-        <Image
-          style={styles.backIcon}
-          source={{ uri: BACK_ICON }}
-        />
-      </View>
-      <View style={styles.headerButton}>
-        <Text numberOfLines={1} style={styles.title}>
-          {route.name}
-        </Text>
-      </View>
+        source={{ uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAsAAAASBAMAAAB/WzlGAAAAElBMVEUAAAAAAAAAAAAAAAAAAAAAAADgKxmiAAAABXRSTlMAIN/PELVZAGcAAAAkSURBVAjXYwABQTDJqCQAooSCHUAcVROCHBiFECTMhVoEtRYA6UMHzQlOjQIAAAAASUVORK5CYII=" }}
+      />
+      <Text numberOfLines={1} style={styles.title}>
+        {route.name}
+      </Text>
     </View>
   );
 };
